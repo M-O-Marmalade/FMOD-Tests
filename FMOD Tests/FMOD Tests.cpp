@@ -1,21 +1,47 @@
-// FMOD Tests.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
 
-#include "pch.h"
+
+#include <Windows.h>
 #include <iostream>
+#include <string>
+#include <thread>
+#include <chrono>
+#include <cstdlib>
+#include "fmod.hpp"
+#include "fmod_studio.hpp"
+
+
+using namespace std;
 
 int main()
 {
-    std::cout << "Hello World!\n"; 
+	
+	FMOD_RESULT result;
+	FMOD::Studio::System* system = NULL;
+
+	result = FMOD::Studio::System::create(&system); // Create the Studio System object.
+
+	result = system->initialize(256, FMOD_STUDIO_INIT_NORMAL, FMOD_INIT_NORMAL, 0);
+
+
+	FMOD::Studio::Bank* masterBank = NULL;
+	system->loadBankFile("media/Master.bank", FMOD_STUDIO_LOAD_BANK_NORMAL, &masterBank);
+
+	FMOD::Studio::Bank* stringsBank = NULL;
+	system->loadBankFile("media/Master.strings.bank", FMOD_STUDIO_LOAD_BANK_NORMAL, &stringsBank);
+	   
+	FMOD::Studio::Bank* musicandFX = NULL;
+	result = system->loadBankFile("media/MusicandFX.bank", FMOD_STUDIO_LOAD_BANK_NORMAL, &musicandFX);
+
+	FMOD::Studio::EventDescription* splashJingleDescription = NULL;
+	system->getEvent("event:/SplashJingle", &splashJingleDescription);
+
+	FMOD::Studio::EventInstance* splashJingleInstance = NULL;
+	splashJingleDescription->createInstance(&splashJingleInstance);
+
+	splashJingleInstance->start();
+
+	system->update(); //begin FMOD sound generation/song playback	
+	
+
+	this_thread::sleep_for(3000ms);
 }
-
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
