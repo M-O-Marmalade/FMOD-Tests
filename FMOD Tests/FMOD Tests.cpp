@@ -29,19 +29,51 @@ int main()
 	FMOD::Studio::Bank* stringsBank = NULL;
 	system->loadBankFile("media/Master.strings.bank", FMOD_STUDIO_LOAD_BANK_NORMAL, &stringsBank);
 	   
-	FMOD::Studio::Bank* musicandFX = NULL;
-	result = system->loadBankFile("media/MusicandFX.bank", FMOD_STUDIO_LOAD_BANK_NORMAL, &musicandFX);
+	FMOD::Studio::Bank* bankA = NULL;
+	result = system->loadBankFile("media/Bank A.bank", FMOD_STUDIO_LOAD_BANK_NORMAL, &bankA);
 
-	FMOD::Studio::EventDescription* splashJingleDescription = NULL;
-	system->getEvent("event:/SplashJingle", &splashJingleDescription);
+	FMOD::Studio::EventDescription* testADescription = NULL;
+	system->getEvent("event:/TestA", &testADescription);
 
-	FMOD::Studio::EventInstance* splashJingleInstance = NULL;
-	splashJingleDescription->createInstance(&splashJingleInstance);
+	FMOD::Studio::EventInstance* testAInstance = NULL;
+	testADescription->createInstance(&testAInstance);
 
-	splashJingleInstance->start();
+	testAInstance->start();
 
 	system->update(); //begin FMOD sound generation/song playback	
 	
 
-	this_thread::sleep_for(3000ms);
+	
+
+
+	/*
+	FMOD_STUDIO_PARAMETER_DESCRIPTION paramDesc;
+
+	testADescription->getParameterDescriptionByName("Cutoff", &paramDesc);
+	
+	FMOD_STUDIO_PARAMETER_ID cutoffID = paramDesc.id;
+
+	float cutoffParameterValue = 0.1f;
+
+	testAInstance->setParameterByID(cutoffID, cutoffParameterValue);
+
+	system->update();
+
+	*/
+
+	this_thread::sleep_for(2000ms);
+
+	testAInstance->setParameterByName("Cutoff", 7000.0f);
+
+	//testAInstance->setPitch(0.5f);
+
+	system->update();
+
+	this_thread::sleep_for(10s);
+
+	testAInstance->setParameterByName("Res", 5.0f);
+	system->update();
+
+	this_thread::sleep_for(20s);
+
 }
